@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             initMazeGame();
                         }
                     }, 1500);
-                }, 2000);
+                }, 5200);
             });
         });
     }
