@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>Wedding Invitation</title>
+    <meta name="theme-color" content="#0B2F46">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap&display=swap">
+    <link rel="preload" as="image" href="./image/1.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="./image/2.jpg" fetchpriority="high">
+    <link rel="stylesheet" href="css/index.css" media="all">
+</head>
+<body>
+    <!-- Music Background (deferred via preload none + lazy) -->
+    <audio id="bg-music" loop preload="none">
+        <source src="./audio/02_Al_Leila.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Toggle Button -->
+    <button id="music-toggle" class="music-toggle hidden">
+        <span class="music-icon">🎵</span>
+    </button>
+
+    <!-- Section 1: Hero Envelope Section -->
+    <section class="hero-envelope" id="hero-envelope">
+        <div class="click-instruction">
+            <span>CLICK TO OPEN</span>
+            <div class="arrow">↓</div>
+        </div>
+        
+        <div class="envelope-wrapper" id="envelope-trigger">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="pocket"></div>
+                <div class="card" id="card">
+                    <div class="card-content">
+                        <h2 class="elegant-italics">Mahmoud & Yara</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="main-content" class="hidden-content">
+        <!-- Section 2: Main Invitation Section -->
+        <section class="invitation-main" id="invitation-main">
+            <div class="main-container">
+                <div class="logo-circle">
+                    <span class="initials">M & Y</span>
+                </div>
+
+                <p class="tagline">Two hearts, one destiny.</p>
+                
+                <h1 class="couple-names-main">MAHMOUD & YARA</h1>
+                
+                <p class="promise">A promise sealed with love and time.</p>
+
+                <div class="date-frame">
+                    <p>Friday, September 4, 2026 - 06:00 PM</p>
+                </div>
+
+                <div class="couple-portrait-section">
+                    <p class="section-label">THE COUPLE</p>
+                    <div class="portrait-frame">
+                        <img src="./image/1.jpg" alt="The Couple" class="couple-photo" width="500" height="500" decoding="async" fetchpriority="high">
+                        <div class="roses-overlay"></div>
+                    </div>
+                    <p class="portrait-subtext">Two hearts, one love</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Maze Game Section -->
+        <section class="maze-section" id="maze-section">
+            <div class="maze-header">
+                <h2 class="maze-title">A JOURNEY OF LOVE: HELP HIM FIND HER</h2>
+                <p class="maze-caption">Guide the groom through the maze to find his bride. Collect hearts for bonus points!</p>
+            </div>
+
+            <div class="maze-game-wrapper" id="maze-game-wrapper">
+                <!-- Difficulty Selector -->
+                <div class="difficulty-selector">
+                    <span class="difficulty-label">Difficulty:</span>
+                    <button type="button" class="diff-btn active" data-diff="easy">Easy</button>
+                    <button type="button" class="diff-btn" data-diff="medium">Medium</button>
+                    <button type="button" class="diff-btn" data-diff="hard">Hard</button>
+                </div>
+
+                <!-- HUD -->
+                <div class="maze-hud">
+                    <div class="hud-item">
+                        <span class="hud-icon">⏱️</span>
+                        <span class="hud-label">Time</span>
+                        <span class="hud-value" id="maze-timer">00:00</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">👣</span>
+                        <span class="hud-label">Moves</span>
+                        <span class="hud-value" id="maze-moves">0</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">💖</span>
+                        <span class="hud-label">Hearts</span>
+                        <span class="hud-value"><span id="maze-hearts">0</span>/<span id="maze-hearts-total">0</span></span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">⭐</span>
+                        <span class="hud-label">Score</span>
+                        <span class="hud-value" id="maze-score">0</span>
+                    </div>
+                </div>
+
+                <div class="maze-board-container">
+                    <canvas id="mazeCanvas"></canvas>
+                    <!-- Start Overlay -->
+                    <div class="maze-start-overlay" id="maze-start-overlay">
+                        <div class="start-overlay-content">
+                            <div class="start-emoji">💑</div>
+                            <h3>Ready to Begin?</h3>
+                            <p>Help Mahmoud find Yara through the maze of love!</p>
+                            <button type="button" class="start-maze-btn" id="start-maze-btn">START JOURNEY</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="maze-actions">
+                    <button type="button" class="action-btn" id="maze-hint-btn" title="Show Hint">
+                        <span>💡</span> Hint
+                    </button>
+                    <button type="button" class="action-btn" id="maze-reset-btn" title="Reset Maze">
+                        <span>🔄</span> Reset
+                    </button>
+                    <button type="button" class="action-btn" id="maze-solve-btn" title="Show Solution">
+                        <span>🗺️</span> Solution
+                    </button>
+                </div>
+
+                <div class="maze-controls">
+                    <div class="control-row">
+                        <button type="button" class="maze-btn" id="maze-up">↑</button>
+                    </div>
+                    <div class="control-row">
+                        <button type="button" class="maze-btn" id="maze-left">←</button>
+                        <button type="button" class="maze-btn" id="maze-down">↓</button>
+                        <button type="button" class="maze-btn" id="maze-right">→</button>
+                    </div>
+                </div>
+
+                <!-- Swipe hint for mobile -->
+                <p class="swipe-hint">💡 Tip: Use arrow keys, buttons, or swipe on the maze</p>
+            </div>
+
+            <!-- Success Modal -->
+            <div class="maze-modal" id="maze-modal">
+                <div class="modal-content">
+                    <div class="together-photo-frame">
+                        <img src="./image/2.jpg" alt="Together" class="together-photo" width="360" height="360" decoding="async" loading="lazy" fetchpriority="low">
+                    </div>
+                    <h2>HE FOUND HER 💖</h2>
+                    <div class="final-stats">
+                        <div class="stat-row"><span>⏱️ Time:</span><span id="final-time">00:00</span></div>
+                        <div class="stat-row"><span>👣 Moves:</span><span id="final-moves">0</span></div>
+                        <div class="stat-row"><span>💖 Hearts:</span><span id="final-hearts">0/0</span></div>
+                        <div class="stat-row total"><span>⭐ Final Score:</span><span id="final-score">0</span></div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="replay-btn" id="replay-maze-btn">🔄 PLAY AGAIN</button>
+                        <button type="button" class="continue-btn" id="continue-to-next">CONTINUE TO INVITATION</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="gated-content" class="gated-content">
+            <!-- Section 4: Event Details and Countdown -->
+            <section class="event-section" id="story-section">
+            <div class="event-container">
+                <h2 class="section-title">Event Details</h2>
+                
+                <div class="details-grid">
+                    <div class="detail-card">
+                        <div class="detail-icon">📅</div>
+                        <p class="detail-text">Friday, September 4, 2026</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">⏰</div>
+                        <p class="detail-text">Six O'Clock in the Evening</p>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">📍</div>
+                        <p class="detail-text">Marseille Hall</p>
+                    </div>
+                </div>
+
+                <div class="countdown-wrapper">
+                    <h3 class="countdown-intro">The hours count down, until we do!</h3>
+                    <div class="countdown-timer" id="countdown-timer">
+                        <div class="countdown-item">
+                            <div class="circle">
+                                <span class="number" id="days">00</span>
+                            </div>
+                            <span class="label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="circle">
+                                <span class="number" id="hours">00</span>
+                            </div>
+                            <span class="label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="circle">
+                                <span class="number" id="minutes">00</span>
+                            </div>
+                            <span class="label">Minutes</span>
+                        </div>
+                        <div class="countdown-item">
+                            <div class="circle">
+                                <span class="number" id="seconds">00</span>
+                            </div>
+                            <span class="label">Seconds</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 5: Gallery & Timeline -->
+        <section class="gallery-timeline-section" id="gallery-timeline">
+            <div class="section-divider">
+                <div class="divider-line"></div>
+                <div class="divider-icon">💒</div>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="section-header">
+                    <span class="section-eyebrow">A Look Back</span>
+                    <h2 class="section-title">Our Memories</h2>
+                    <p class="section-subtitle">Every moment captured, every memory cherished forever.</p>
+                </div>
+                <div class="gallery-grid">
+                    <div class="gallery-item featured">
+                        <div class="gallery-frame">
+                            <img src="./image/1.jpg" alt="Our First Portrait" width="800" height="800" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Together</span>
+                                    <span class="caption-sub">The Beginning of Forever</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item tall">
+                        <div class="gallery-frame">
+                            <img src="./image/DSC_0336.JPG" alt="A Beautiful Moment" width="400" height="800" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">In Love</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-frame">
+                            <img src="./image/DSC_0362.JPG" alt="Special Memory" width="400" height="400" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Our Story</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item wide">
+                        <div class="gallery-frame">
+                            <img src="./image/DSC_0329.JPG" alt="Together Forever" width="800" height="400" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Hand in Hand</span>
+                                    <span class="caption-sub">Side by Side, Always</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-frame">
+                            <img src="./image/5.jpg" alt="Joyful Moment" width="400" height="400" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Joy</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item tall">
+                        <div class="gallery-frame">
+                            <img src="./image/DSC_0368.JPG" alt="Our Journey" width="400" height="800" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">The Journey</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-frame">
+                            <img src="./image/7.jpg" alt="Forever Together" width="400" height="400" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Forever</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <div class="gallery-frame">
+                            <img src="./image/8.jpg" alt="Love Story" width="400" height="400" decoding="async" loading="lazy" fetchpriority="low">
+                            <div class="gallery-overlay">
+                                <span class="gallery-caption">
+                                    <span class="caption-title">Happiness</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider spaced">
+                <div class="divider-line"></div>
+                <div class="divider-icon">💍</div>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="timeline-container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Chapters of Love</span>
+                    <h2 class="section-title">Our Journey</h2>
+                    <p class="section-subtitle">From the first glance to forever — the story of us.</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-milestone left">
+                        <div class="milestone-icon">🥂</div>
+                        <div class="milestone-content">
+                            <div class="milestone-date">
+                                <span class="date-day">26</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-month">4</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-year">2025</span>
+                            </div>
+                            <h3 class="milestone-title">First Meeting</h3>
+                            <p class="milestone-text">Two hearts discovered each other in the most perfect of moments. A day that would change everything forever.</p>
+                        </div>
+                        <div class="milestone-dot"></div>
+                    </div>
+
+                    <div class="timeline-milestone right">
+                        <div class="milestone-icon">💞</div>
+                        <div class="milestone-content">
+                            <div class="milestone-date">
+                                <span class="date-day">23</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-month">5</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-year">2025</span>
+                            </div>
+                            <h3 class="milestone-title">The Proposal</h3>
+                            <p class="milestone-text">A beautiful moment that changed everything. One question, one answer — and two destinies became one.</p>
+                        </div>
+                        <div class="milestone-dot"></div>
+                    </div>
+
+                    <div class="timeline-milestone left">
+                        <div class="milestone-icon">💍</div>
+                        <div class="milestone-content">
+                            <div class="milestone-date">
+                                <span class="date-day">4</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-month">7</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-year">2025</span>
+                            </div>
+                            <h3 class="milestone-title">Engagement Party</h3>
+                            <p class="milestone-text">Celebrated the beginning of their journey surrounded by the love and joy of family and friends.</p>
+                        </div>
+                        <div class="milestone-dot"></div>
+                    </div>
+
+                    <div class="timeline-milestone right">
+                        <div class="milestone-icon">💒</div>
+                        <div class="milestone-content">
+                            <div class="milestone-date">
+                                <span class="date-day">14</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-month">8</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-year">2026</span>
+                            </div>
+                            <h3 class="milestone-title">The Wedding</h3>
+                            <p class="milestone-text">Two souls became one in the eyes of God. A sacred promise made before heaven and earth.</p>
+                        </div>
+                        <div class="milestone-dot"></div>
+                    </div>
+
+                    <div class="timeline-milestone left">
+                        <div class="milestone-icon">🎉</div>
+                        <div class="milestone-content">
+                            <div class="milestone-date">
+                                <span class="date-day">4</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-month">9</span>
+                                <span class="date-sep">.</span>
+                                <span class="date-year">2026</span>
+                            </div>
+                            <h3 class="milestone-title">The Celebration</h3>
+                            <p class="milestone-text">And here they start their ultimate chapter — surrounded by love, laughter, and a lifetime of beautiful tomorrows.</p>
+                        </div>
+                        <div class="milestone-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Section 6: Footer and RSVP -->
+        <footer class="footer-rsvp-section" id="rsvp">
+            <div class="footer-container">
+                <div class="footer-main-content">
+                    <h2 class="calligraphy-together">Together</h2>
+                    <h1 class="couple-names-footer">MAHMOUD & YARA</h1>
+                    <p class="celebrate-text">We cannot wait to celebrate this love.</p>
+                </div>
+
+                <div class="rsvp-actions">
+                    <a href="https://wa.me/201095158241" target="_blank" class="rsvp-btn whatsapp">
+                        <span class="btn-icon">💬</span> Confirm Attendance
+                    </a>
+                    <a href="https://maps.app.goo.gl/mSWd6PjqNTCDkDLXA" target="_blank" class="rsvp-btn location">
+                        <span class="btn-icon">📍</span> View Location
+                    </a>
+                </div>
+
+                <div class="copyright-signature">
+                    <div class="copyright-card">
+                        <p class="love-text">Created with love</p>
+                        <div class="developer-info">
+                           <p class="dev-name">Mahmoud Mabrouk</p>
+                           <p class="dev-location">Kom Hamada, Beheira, Egypt</p>
+                           <p class="dev-contact">01095158241</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        </div>
+    </div>
+    <script src="js/index.js" defer></script>
+</body>
+</html>
